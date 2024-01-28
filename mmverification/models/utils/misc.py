@@ -11,10 +11,10 @@ from torch import Tensor
 from torch.autograd import Function
 from torch.nn import functional as F
 
-from mmdet.structures import SampleList
-from mmdet.structures.bbox import BaseBoxes, get_box_type, stack_boxes
-from mmdet.structures.mask import BitmapMasks, PolygonMasks
-from mmdet.utils import OptInstanceList
+from mmverification.structures import SampleList
+from mmverification.structures.bbox import BaseBoxes, get_box_type, stack_boxes
+from mmverification.structures.mask import BitmapMasks, PolygonMasks
+from mmverification.utils import OptInstanceList
 
 
 class SigmoidGeometricMean(Function):

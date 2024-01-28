@@ -6,7 +6,7 @@ from mmengine.model import BaseModule
 from mmengine.utils import digit_version, is_tuple_of
 from torch import Tensor
 
-from mmdet.utils import MultiConfig, OptConfigType, OptMultiConfig
+from mmverification.utils import MultiConfig, OptConfigType, OptMultiConfig
 
 
 class SELayer(BaseModule):

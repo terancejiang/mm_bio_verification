@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from mmdet.registry import MODELS
+from mmverification.registry import MODELS
 
 eps = 1e-6
 

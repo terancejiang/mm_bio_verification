@@ -8,8 +8,8 @@ from mmengine.registry import MODELS
 from mmengine.structures import InstanceData
 from torch import Tensor
 
-from mmdet.structures import DetDataSample
-from mmdet.structures.bbox import bbox_flip
+from mmverification.structures import DetDataSample
+from mmverification.structures.bbox import bbox_flip
 
 
 @MODELS.register_module()

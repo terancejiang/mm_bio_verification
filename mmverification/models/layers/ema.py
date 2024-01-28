@@ -7,7 +7,7 @@ import torch.nn as nn
 from mmengine.model import ExponentialMovingAverage
 from torch import Tensor
 
-from mmdet.registry import MODELS
+from mmverification.registry import MODELS
 
 
 @MODELS.register_module()

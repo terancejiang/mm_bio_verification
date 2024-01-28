@@ -9,7 +9,7 @@ from mmcv.ops import nms
 from mmengine.config import ConfigDict
 from torch import Tensor
 
-from mmdet.structures.bbox import bbox_mapping_back
+from mmverification.structures.bbox import bbox_mapping_back
 
 
 # TODO remove this, never be used in mmdet

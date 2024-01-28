@@ -6,7 +6,7 @@ from mmengine.model import BaseModule, Sequential
 from torch import Tensor
 from torch import nn as nn
 
-from mmdet.utils import ConfigType, OptConfigType, OptMultiConfig
+from mmverification.utils import ConfigType, OptConfigType, OptMultiConfig
 
 
 class ResLayer(Sequential):

@@ -7,8 +7,8 @@ import torch.nn as nn
 from mmengine.model import BaseModule
 from torch import Tensor
 
-from mmdet.registry import MODELS
-from mmdet.utils import MultiConfig, OptMultiConfig
+from mmverification.registry import MODELS
+from mmverification.utils import MultiConfig, OptMultiConfig
 
 
 @MODELS.register_module()

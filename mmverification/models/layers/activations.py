@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from mmengine.utils import digit_version
 
-from mmdet.registry import MODELS
+from mmverification.registry import MODELS
 
 if digit_version(torch.__version__) >= digit_version('1.7.0'):
     from torch.nn import SiLU
