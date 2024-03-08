@@ -7,7 +7,7 @@ import torch
 from mmengine.structures import InstanceData
 from mmengine.utils import digit_version
 from six.moves import map, zip
-from torch import Tensor
+from torch import Tensor, nn
 from torch.autograd import Function
 from torch.nn import functional as F
 
@@ -695,3 +695,20 @@ def align_tensor(inputs: List[Tensor],
         max_len = max([len(item) for item in inputs])
 
     return torch.stack([padding_to(item, max_len) for item in inputs])
+
+
+def initialize_weights(train_model):
+    for m in train_model.modules():
+        t = type(m)
+        if t is nn.Conv2d:
+            nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
+            if m.bias is not None:
+                nn.init.constant_(m.bias.data, 0)
+        elif t is nn.BatchNorm2d:
+            m.eps = 1e-3
+            m.momentum = 0.03
+        elif t in [nn.Hardswish, nn.LeakyReLU, nn.ReLU, nn.ReLU6, nn.SiLU]:
+            m.inplace = True
+        elif isinstance(m, nn.Linear):
+            nn.init.kaiming_uniform_(m.weight.data)
+            nn.init.constant_(m.bias.data, 0)

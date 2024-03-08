@@ -383,13 +383,13 @@ class FasterNet(nn.Module):
         else:
             self.forward = self.forward_cls
 
-            # Classifier head
+            # Classifier heads
             # self.avgpool_pre_head = nn.Sequential(
             #     nn.AdaptiveAvgPool2d(1),
             #     nn.Conv2d(self.num_features, feature_dim, 1, bias=False),
             #     act_layer()
             # )
-            # self.head = nn.Linear(feature_dim, num_classes) \
+            # self.heads = nn.Linear(feature_dim, num_classes) \
             #     if num_classes > 0 else nn.Identity()
             self.conv_sep = ConvBlock(width[-1], 512, kernel=(1, 1), stride=(1, 1), padding=(0, 0))
             self.features = GDC(512)

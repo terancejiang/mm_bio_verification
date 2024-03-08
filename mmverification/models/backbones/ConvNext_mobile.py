@@ -86,7 +86,7 @@ class ConvNeSt(nn.Module):
 
     Args:
         in_chans (int): Number of input image channels. Default: 3
-        num_classes (int): Number of classes for classification head. Default: 1000
+        num_classes (int): Number of classes for classification heads. Default: 1000
         depths (tuple(int)): Number of blocks at each stage. Default: [3, 3, 9, 3]
         dims (int): Feature dimension at each stage. Default: [96, 192, 384, 768]
         drop_path_rate (float): Stochastic depth rate. Default: 0.
@@ -134,7 +134,7 @@ class ConvNeSt(nn.Module):
         self.head.weight.data.mul_(head_init_scale)
         self.head.bias.data.mul_(head_init_scale)
 
-        # self.head = nn.Sequential(
+        # self.heads = nn.Sequential(
         #     nn.Conv2d(dims[-1], 512, kernel_size=(1, 1), stride=(1, 1), padding=(0, 0)),
         #     LayerNorm(dims[-1], eps=1e-6, data_format="channels_first"),
         #     nn.GELU(),

@@ -50,7 +50,7 @@ class CrowdHumanMetric(BaseMetric):
             If prefix is not provided in the argument, self.default_prefix
             will be used instead. Defaults to None.
         eval_mode (int): Select the mode of evaluate. Valid mode include
-            0(just body box), 1(just head box) and 2(both of them).
+            0(just body box), 1(just heads box) and 2(both of them).
             Defaults to 0.
         iou_thres (float): IoU threshold. Defaults to 0.5.
         compare_matching_method (str, optional): Matching method to compare
@@ -527,7 +527,7 @@ class Image(object):
 
     Args:
         mode (int): Select the mode of evaluate. Valid mode include
-            0(just body box), 1(just head box) and 2(both of them).
+            0(just body box), 1(just heads box) and 2(both of them).
             Defaults to 0.
     """
 
@@ -578,7 +578,7 @@ class Image(object):
                 }
             body_key (str, None): key of detection body box.
                 Valid when loading detection results and self.eval_mode!=1.
-            head_key (str, None): key of detection head box.
+            head_key (str, None): key of detection heads box.
                 Valid when loading detection results and self.eval_mode!=0.
             class_names (list[str]):class names of data set.
                 Defaults to ['background', 'person'].

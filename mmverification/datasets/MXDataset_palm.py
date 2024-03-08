@@ -1,19 +1,29 @@
-import os.path as osp
-from typing import List, Optional
+import math
+import os
+import random
+from typing import List, Union
 
-from mmengine.dataset import BaseDataset
-from mmengine.fileio import load
-from mmengine.utils import is_abs
+import cv2
+import numpy as np
+import torch
 from torch.utils.data import Dataset
 
+from .dataset_utils import rotate_point
 from ..registry import DATASETS
+
+try:
+    # 提取出了mxnet的recordio， 避免安装mxnet时候出现的各种版本冲突问题
+    # 独立的recordio安装方式详见： https://github.com/terancejiang/MXNet-RecordIO-Standalone
+    import mx_recordio as mx
+except ImportError:
+    # 原版mxnet的recordio
+    import mxnet as mx
 
 
 @DATASETS.register_module()
-class MXFaceDataset_palm(Dataset):
+class MXDataset_palm(Dataset):
     def __init__(self, root_dir, local_rank, im_size=112, align='v6', online_align=False):
-        super(MXFaceDataset_palm, self).__init__()
-        self.transform = augmentation().get_augmentation()
+        super(MXDataset_palm, self).__init__()
         self.online_align = online_align
         self.padding_prob = 0.2
         self.jitter_prob = 0.2
@@ -29,26 +39,14 @@ class MXFaceDataset_palm(Dataset):
 
         self.imgrec = mx.recordio.MXIndexedRecordIO(path_imgidx, path_imgrec, 'r')
 
-        self.image_width = 720
-        self.image_height = 1140
-
-        # header, _ = mx.recordio.unpack(s)
-        # if header.flag > 0:
-        #     self.header0 = (int(header.label[0]), int(header.label[1]))
-        #     self.imgidx = np.array(range(1, int(header.label[0])))
-        #
-        # else:
         self.imgidx = np.array(list(self.imgrec.keys))
         self.align_version = align
         if int(os.environ["RANK"]) == 0:
             print("Align Version:{}".format(align))
-        if align == 'v5':
-            self.align = self.align_v5
-        elif align == 'v3':
-            self.align = self.align_v3
-        elif align == 'v4':
-            self.align = self.align_v4
-        elif align == 'v6':
+
+        if align == 'v6':
+            self.image_width = 720
+            self.image_height = 1140
             self.align = self.align_v6f
 
     def jitter(self, point1, point2, point3):
@@ -139,22 +137,6 @@ class MXFaceDataset_palm(Dataset):
 
             key_points = header.label
             key_points = np.reshape(key_points, (-1, 2))
-            #
-            # pointA = key_points[3]
-            # pointB = key_points[5]
-            # pointC = key_points[0]
-            #
-            # A = pointA
-            # B = pointB
-            # C = pointC
-            #
-            # AB = (B[0] - A[0], B[1] - A[1])
-            # AC = (C[0] - A[0], C[1] - A[1])
-            #
-            # # Compute the z-component of the cross product of A->B and A->C
-            # cross_product_z = AB[0] * AC[1] - AB[1] * AC[0]
-            # if cross_product_z == 0:
-            #     return self.__getitem__(random.randint(0, len(self.imgidx) - 1))
 
             is_jitter = False
             if self.jitter_radius > 0 and self.jitter_prob > random.random():
@@ -177,7 +159,6 @@ class MXFaceDataset_palm(Dataset):
                     return self.__getitem__(random.randint(0, len(self.imgidx) - 1))
             except Exception as e:
                 print("Error in padding")
-                # return self.__getitem__(random.randint(0, len(self.imgidx) - 1))
                 return self.__getitem__(random.randint(0, len(self.imgidx) - 1))
 
         if img.shape[0] != self.im_size or img.shape[1] != self.im_size:
@@ -193,8 +174,6 @@ class MXFaceDataset_palm(Dataset):
 
         label = header.id
         label = int(label)
-        # if not isinstance(label, numbers.Number):
-        #     label = label[0]
 
         label = torch.tensor(label, dtype=torch.long)
 

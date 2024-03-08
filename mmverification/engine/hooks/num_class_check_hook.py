@@ -8,11 +8,11 @@ from mmdet.registry import HOOKS
 
 @HOOKS.register_module()
 class NumClassCheckHook(Hook):
-    """Check whether the `num_classes` in head matches the length of `classes`
+    """Check whether the `num_classes` in heads matches the length of `classes`
     in `dataset.metainfo`."""
 
     def _check_head(self, runner: Runner, mode: str) -> None:
-        """Check whether the `num_classes` in head matches the length of
+        """Check whether the `num_classes` in heads matches the length of
         `classes` in `dataset.metainfo`.
 
         Args:
@@ -28,7 +28,7 @@ class NumClassCheckHook(Hook):
                 f'Please set `classes` '
                 f'in the {dataset.__class__.__name__} `metainfo` and'
                 f'check if it is consistent with the `num_classes` '
-                f'of head')
+                f'of heads')
         else:
             classes = dataset.metainfo['classes']
             assert type(classes) is not str, \
@@ -50,7 +50,7 @@ class NumClassCheckHook(Hook):
                          f'{dataset.__class__.__name__}')
 
     def before_train_epoch(self, runner: Runner) -> None:
-        """Check whether the training dataset is compatible with head.
+        """Check whether the training dataset is compatible with heads.
 
         Args:
             runner (:obj:`Runner`): The runner of the training or evaluation
@@ -59,7 +59,7 @@ class NumClassCheckHook(Hook):
         self._check_head(runner, 'train')
 
     def before_val_epoch(self, runner: Runner) -> None:
-        """Check whether the dataset in val epoch is compatible with head.
+        """Check whether the dataset in val epoch is compatible with heads.
 
         Args:
             runner (:obj:`Runner`): The runner of the training or evaluation
